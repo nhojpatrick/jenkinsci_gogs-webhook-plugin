@@ -3,7 +3,11 @@ package org.jenkinsci.plugins.gogs;
 import hudson.model.Item;
 import jenkins.model.Jenkins;
 
+import java.util.logging.Logger;
+
 class GogsUtils {
+
+	private final static Logger LOGGER = Logger.getLogger(GogsUtils.class.getName());
 
 	private GogsUtils() {
 	}
@@ -17,16 +21,21 @@ class GogsUtils {
 		Jenkins jenkins = Jenkins.getActiveInstance();
 		// direct search, can be used to find folder based items <folder>/<folder>/<jobName>
 		T item = jenkins.getItemByFullName(jobName, type);
+		LOGGER.fine("GogsWebHook found Job '" + jobName + "' ByFullName " + (item != null));
 		if (item == null) {
 			// not found in a direct search, search in all items since the item might be in a folder but given without folder structure
 			// (to keep it backwards compatible)
 			for (T allItem : jenkins.getAllItems(type)) {
-				 if (allItem.getName().equals(jobName)) {
-				 	item = allItem;
-				 	break;
-				 }
+				LOGGER.fine("GogsWebHook searching for Job '" + jobName + "' checking '" + allItem.getName() + '"');
+				if (allItem.getName().equals(jobName)) {
+					LOGGER.fine("GogsWebHook found Job '" + jobName + "' " + (allItem != null) + " Item '" + allItem + "'");
+					item = allItem;
+					break;
+				}
 			}
 		}
+		LOGGER.fine("GogsWebHook Job '" + jobName + "' found " + (item != null));
 		return item;
 	}
+
 }
