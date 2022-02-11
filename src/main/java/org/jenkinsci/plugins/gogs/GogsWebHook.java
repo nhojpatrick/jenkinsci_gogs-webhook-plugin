@@ -126,6 +126,28 @@ public class GogsWebHook implements UnprotectedRootAction {
             exitWebHook(result, rsp);
             return;
         }
+        // example setup for;
+        // folder with name 'aFolder'
+        // multibranchPipelineJob with name 'aProject'
+        // branch with name 'feature/aFeature'
+        // the jenkins job would be 'aFolder/aProject&ref=feature%252FaFeature'
+        // for create branch the project 'aFolder/aProject' needs to be triggered
+        // for delete branch the project 'aFolder/aProject' needs to be triggered
+        // for branch commit changes the project ''aFolder/aProject&ref=feature%252FaFeature' needs to be triggered
+        //
+        // currently the following happens
+        // 1) find job using 'job' query parameter
+        // 2) find job using 'job' query parameter and 'ref' query parameter
+        // 3) find job using 'job' query parameter and 'ref' body parameter
+        //
+        // to support both;
+        // webhook set to job 'aFolder/aProject'
+        // 0.1) if push and job 'job' and 'job/body.ref' exists, trigger 'job/body.ref'
+        // 0.2) if create and job 'job' and 'job/body.ref' exists, trigger 'job'
+        // 0.3) if delete and job 'job' and 'job/body.ref' exists, trigger 'job'
+        // 1) same as before
+        // 2) same as before
+        // 3) same as before
 
         // Get X-Gogs-Delivery header with deliveryID
         String gogsDelivery = req.getHeader("X-Gogs-Delivery");
