@@ -162,6 +162,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.mig82</groupId>
+      <artifactId>folder-properties</artifactId>
+      <version>1.2.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jenkins-ci.plugins</groupId>
       <artifactId>job-dsl</artifactId>
       <version>1.78.3</version>
